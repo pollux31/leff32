@@ -3,6 +3,7 @@
 #include "main.h"
 #include "n31-40.xbm"
 #include "analog.h"
+#include "menu.h"
 
 // define tasks 
 void TaskMain(void *pvParameters);
@@ -46,6 +47,9 @@ void setup()
 
     // Analog setup
     SetupAnalog();
+
+    // Menu setup   
+    SetupMenu();
 
     // Create the default task
     xTaskCreatePinnedToCore(

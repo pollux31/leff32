@@ -11,6 +11,7 @@ void TaskAnalog(void *pvParameters);
 
 void SetupAnalog()
 {
+    /*
     esp_adc_cal_characteristics_t adc_chars;
     esp_adc_cal_value_t val_type = esp_adc_cal_characterize((adc_unit_t)ADC_UNIT_2, (adc_atten_t)ADC2_CHANNEL_4, (adc_bits_width_t)ADC_WIDTH_BIT_12, 1100, &adc_chars);
     //Check type of calibration value used to characterize ADC
@@ -22,6 +23,7 @@ void SetupAnalog()
     } else {
         Serial.println("Default Vref: 1100mV");
     }
+    */
 
     // Create the default task
     xTaskCreatePinnedToCore(
@@ -47,7 +49,7 @@ void TaskAnalog(void *pvParameters)
     {
         uint16_t v = analogRead(ADC2_4_PIN);
         float voltage = ((float)v / 4095.0) * 5;
-        Serial.printf("ADC2_4_PIN: %d, voltage: %f\n", v, voltage);
+        // Serial.printf("ADC2_4_PIN: %d, voltage: %f\n", v, voltage);
 
         // Wait 1000ms
         vTaskDelay(1000 / portTICK_PERIOD_MS);
