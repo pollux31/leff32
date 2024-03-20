@@ -1,33 +1,19 @@
 #define ARDUINO_RUNNING_CORE 1
 
 #include <Arduino.h>
+#include <Preferences.h>
 
 #include "main.h"
 #include "n31-40.xbm"
 #include "analog.h"
 #include "menu.h"
-#include "file.h"
+#include "doublereset.h"
 
-//  You only need to format LittleFS the first time you run a
-//  test or else use the LITTLEFS plugin to create a partition 
-//  https://github.com/lorol/arduino-esp32littlefs-plugin
-
-// Include the DoubleResetDetector_Generic library
-#define ESP_DRD_USE_LITTLEFS        true
-#define ESP_DRD_USE_SPIFFS          false
-#define ESP_DRD_USE_EEPROM          false
-#define DOUBLERESETDETECTOR_DEBUG   false
-#include <ESP_DoubleResetDetector.h>      //https://github.com/khoih-prog/ESP_DoubleResetDetector
-
-// Number of seconds after reset during which a 
-// subsequent reset will be considered a double reset.
-#define DRD_TIMEOUT 5
-
-// RTC Memory Address for the DoubleResetDetector to use
-#define DRD_ADDRESS 0
+// Preferences to store data
+Preferences preferences;
 
 //DoubleResetDetector drd(DRD_TIMEOUT, DRD_ADDRESS);
-DoubleResetDetector* drd;
+DoubleReset* dr;
 
 // define tasks 
 void TaskMain(void *pvParameters);
@@ -72,15 +58,10 @@ void setup()
     // Analog setup
     SetupAnalog();
 
-    if(!LittleFS.begin(FORMAT_LITTLEFS_IF_FAILED)){
-        Serial.println("LittleFS Mount Failed");
-        return;
-    }
-
     // Test if DoubleResetDetector is activated
-    drd = new DoubleResetDetector(DRD_TIMEOUT, DRD_ADDRESS);
+    dr = new DoubleReset(&preferences);
 
-    if (drd->detectDoubleReset()) {
+    if (dr->detectDoubleReset()) {
         // Menu setup that activate the Menu disply on serial port
         SetupMenu();
     }
@@ -119,7 +100,7 @@ void TaskMain(void *pvParameters) // This is a task.
         // so that it can recognise when the timeout expires.
         // You can also call drd.stop() when you wish to no longer
         // consider the next reset as a double reset.
-        drd->loop();
+        dr->loop();
 
 
         // Wait 100ms
