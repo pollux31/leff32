@@ -60,7 +60,7 @@ void setup()
     SetupAnalog();
 
     // LedStrip setup
-    SetupLed();
+    //SetupLed();
 
     // Test if DoubleResetDetector is activated
     dr = new DoubleReset(&preferences);
@@ -106,11 +106,8 @@ void TaskMain(void *pvParameters) // This is a task.
         // consider the next reset as a double reset.
         dr->loop();
 
-        //LedScenario();
-        rainbow(5);
-
         // Wait 100ms
-        //vTaskDelay(100 / portTICK_PERIOD_MS);
+        vTaskDelay(100 / portTICK_PERIOD_MS);
 
     } // End infinit loop
 }

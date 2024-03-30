@@ -1,0 +1,8 @@
+#ifndef LEDSTRIP_H
+#define LEDSTRIP_H
+
+extern void SetupLed();
+extern void LedScenario();
+extern void rainbow(unsigned long wait);
+
+#endif
