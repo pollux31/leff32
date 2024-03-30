@@ -60,7 +60,7 @@ void setup()
     SetupAnalog();
 
     // LedStrip setup
-    //SetupLed();
+    SetupLed();
 
     // Test if DoubleResetDetector is activated
     dr = new DoubleReset(&preferences);

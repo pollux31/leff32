@@ -12,7 +12,9 @@
 const int stripPin 	= 12;
 
 //Variables
-bool gReverseDirection 	= false;
+volatile int ledLevel = 0;
+int oldLedLevel = 0;
+//bool gReverseDirection = false;
 
 //Objects
 CRGB leds[NUM_LEDS];
@@ -42,6 +44,11 @@ void SetupLed() {
 
 }
 
+void SetLedLevel(int level) {
+    ledLevel = level;
+}
+
+
 /*--------------------------------------------------*/
 /*                       Tasks                      */
 /*--------------------------------------------------*/
@@ -49,11 +56,30 @@ void SetupLed() {
 //---------------------------------------------------------------
 void TaskLed(void *pvParameters)
 {
-    CRGB color;
+    CRGB color = CRGB::Red;
 
     while (1)
     {
-    color.setRGB(random(255), random(255), random(255));
+        // check if value changed
+        if (ledLevel != oldLedLevel) {
+            // set the new value
+            oldLedLevel = ledLevel;
+            //Serial.printf(".");
+
+            // Clear the strip
+            memset(leds, 0, NUM_LEDS * sizeof(CRGB));
+            for (int i = 0; i < ledLevel * NUM_LEDS / 2048; i++) {
+                leds[i] = CRGB::Red;
+            }
+
+            FastLED.show(); 
+        }
+
+
+
+
+    /*
+    //color.setRGB(random(255), random(255), random(255));
     for (int i = 0; i < NUM_LEDS; i++) {
         leds[i] = color;
         leds[i + 3] = color;
@@ -68,7 +94,7 @@ void TaskLed(void *pvParameters)
         // Wait 10ms
         vTaskDelay(10 / portTICK_PERIOD_MS);
  	}
-
+    */
     } // End infinit loop
 }
 

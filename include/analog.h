@@ -2,9 +2,8 @@
 #define ANALOG_H
 
 #include <Arduino.h>
-#include "esp_adc_cal.h"
-
-#define ADC2_4_PIN 13
+//#include "esp_adc_cal.h"
+#include "filter.h"
 
 
 extern void SetupAnalog();
